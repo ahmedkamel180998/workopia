@@ -1,3 +1,3 @@
 <?php
 
-echo 'Listings index page';
+view('listings/index');

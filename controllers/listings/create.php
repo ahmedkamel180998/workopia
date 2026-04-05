@@ -1,3 +1,3 @@
 <?php
 
-echo 'Post a new job';
+view('listings/create');
