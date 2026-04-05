@@ -13,8 +13,8 @@
                 <h4 class="text-lg font-bold mb-3">Quick Links</h4>
                 <ul class="grid grid-cols-2 gap-2">
                     <li><a href="/" class="text-blue-200 hover:text-yellow-400 transition">Home</a></li>
-                    <li><a href="/jobs" class="text-blue-200 hover:text-yellow-400 transition">Browse Jobs</a></li>
-                    <li><a href="/post-job" class="text-blue-200 hover:text-yellow-400 transition">Post a Job</a></li>
+                    <li><a href="/listings" class="text-blue-200 hover:text-yellow-400 transition">Browse Jobs</a></li>
+                    <li><a href="/listings/create" class="text-blue-200 hover:text-yellow-400 transition">Post a Job</a></li>
                     <li><a href="/login" class="text-blue-200 hover:text-yellow-400 transition">Login</a></li>
                     <li><a href="/register" class="text-blue-200 hover:text-yellow-400 transition">Register</a></li>
                 </ul>
