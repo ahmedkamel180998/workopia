@@ -11,15 +11,18 @@ class Router
      * 
      * @param string $method
      * @param string $uri
-     * @param string $controller
+     * @param string $action
      * @return void
      */
-    public function registerRoute($method, $uri, $controller)
+    public function registerRoute($method, $uri, $action)
     {
+        list($controller, $controllerMethod) = explode('@', $action);
+
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,
-            'controller' => $controller
+            'controller' => $controller,
+            'controllerMethod' => $controllerMethod,
         ];
     }
 
@@ -95,7 +98,20 @@ class Router
     {
         foreach ($this->routes as $route) {
             if ($route['method'] === $method && $route['uri'] === $uri) {
-                require basePath('App/' . $route['controller']);
+                $controllerClass = "App\\Controllers\\{$route['controller']}";
+                $controllerMethod = $route['controllerMethod'];
+
+                // Check if the controller class exists
+                if (!class_exists($controllerClass)) {
+                    $this->error(500);
+                }
+                // Then check if the method exists in the controller
+                if (!method_exists($controllerClass, $controllerMethod)) {
+                    $this->error(500);
+                }
+                // If both the class and method exist, instantiate the controller and call the method
+                $controllerInstance = new $controllerClass();
+                $controllerInstance->$controllerMethod();
                 return;
             }
         }
