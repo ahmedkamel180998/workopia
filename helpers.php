@@ -16,12 +16,14 @@ function basePath($path = '')
  * Load a view file
  * 
  * @param string $view
+ * @param array $data
  * @return void
  */
-function view($view)
+function view($view, $data = [])
 {
     $viewPath = basePath('views/' . $view . '.view.php');
     if (file_exists($viewPath)) {
+        extract($data);
         require $viewPath;
     } else {
         echo "View not found: " . $viewPath;
@@ -215,4 +217,16 @@ function dump(...$values): void
 function dd(...$values): void
 {
     die(dump(...$values));
+}
+
+/**
+ * Format a number as currency
+ * 
+ * @param string $number
+ * @param int $decimals Number of decimal places
+ * @return string
+ */
+function formatCurrency($number, $decimals = 2): string
+{
+    return '$' . number_format(floatval($number), $decimals);
 }
