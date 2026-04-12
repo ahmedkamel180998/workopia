@@ -1,9 +1,9 @@
 <?php
 require '../helpers.php';
-require basePath('Database.php');
+require basePath('Framework/Database.php');
 $dbConfig = require basePath('config/db.php');
 $db = new Database($dbConfig);
-require basePath('Router.php');
+require basePath('Framework/Router.php');
 // Instantiate the router
 $router = new Router();
 // Load the routes
