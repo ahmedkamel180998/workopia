@@ -2,6 +2,8 @@
 
 namespace Framework;
 
+use App\Controllers\ErrorController;
+
 class Router
 {
     protected $routes = [];
@@ -75,19 +77,6 @@ class Router
     }
 
     /**
-     * Load the error page with http response code
-     * 
-     * @param int $httpCode
-     * @return void
-     */
-    protected function error($httpCode = 404)
-    {
-        http_response_code($httpCode);
-        view("error/{$httpCode}");
-        exit;
-    }
-
-    /**
      * Route the request to the appropriate controller
      * 
      * @param string $method
@@ -103,11 +92,13 @@ class Router
 
                 // Check if the controller class exists
                 if (!class_exists($controllerClass)) {
-                    $this->error(500);
+                    ErrorController::error("Controller class '{$controllerClass}' not found");
+                    exit;
                 }
                 // Then check if the method exists in the controller
                 if (!method_exists($controllerClass, $controllerMethod)) {
-                    $this->error(500);
+                    ErrorController::error("Method '{$controllerMethod}' not found in controller '{$controllerClass}'");
+                    exit;
                 }
                 // If both the class and method exist, instantiate the controller and call the method
                 $controllerInstance = new $controllerClass();
@@ -116,6 +107,7 @@ class Router
             }
         }
 
-        $this->error();
+        ErrorController::notFound();
+        exit;
     }
 }
