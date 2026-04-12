@@ -33,16 +33,16 @@ class ListingController
      *
      * @return void
      */
-    public function show()
+    public function show($params)
     {
-        $id = $_GET['id'] ?? null;
+        $id = $params['id'] ?? null;
         if (!$id) {
             header('Location: /listings');
             exit;
         }
 
-        $params = ['id' => $id];
-        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $params)->fetch();
+        $queryParams = ['id' => $id];
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
 
         view('listings/show', [
             'listing' => $listing,

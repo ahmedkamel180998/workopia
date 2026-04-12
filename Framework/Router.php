@@ -83,27 +83,55 @@ class Router
      * @param string $uri
      * @return void
      */
-    public function route($method, $uri)
+    public function route($uri)
     {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && $route['uri'] === $uri) {
-                $controllerClass = "App\\Controllers\\{$route['controller']}";
-                $controllerMethod = $route['controllerMethod'];
+            // Split the current uri into segments
+            $uriSegments = explode('/', trim($uri, '/'));
 
-                // Check if the controller class exists
-                if (!class_exists($controllerClass)) {
-                    ErrorController::error("Controller class '{$controllerClass}' not found");
-                    exit;
+            // Split the route uri into segments
+            $routeSegments = explode('/', trim($route['uri'], '/'));
+
+            $match = true;
+            // Check if the number of segments match and the request method matches
+            if (count($uriSegments) === count($routeSegments) && $route['method'] === $requestMethod) {
+                $params = [];
+                $match = true;
+
+                for ($i = 0; $i < count($uriSegments); $i++) {
+                    // If uri segments don't match and the route segment is not a parameter, then it's not a match
+                    if ($uriSegments[$i] !== $routeSegments[$i] && !preg_match('/\{(.+?)\}/', $routeSegments[$i])) {
+                        $match = false;
+                        break;
+                    }
+
+                    // If uri segment doesn't match but the route segment is a parameter,
+                    // then we extract the parameter value
+                    if (preg_match('/\{(.+?)\}/', $routeSegments[$i], $matches)) {
+                        $params[$matches[1]] = $uriSegments[$i];
+                    }
                 }
-                // Then check if the method exists in the controller
-                if (!method_exists($controllerClass, $controllerMethod)) {
-                    ErrorController::error("Method '{$controllerMethod}' not found in controller '{$controllerClass}'");
-                    exit;
+
+                if ($match) {
+                    $controllerClass = "App\\Controllers\\{$route['controller']}";
+                    $controllerMethod = $route['controllerMethod'];
+
+                    // Check if the controller class exists
+                    if (!class_exists($controllerClass)) {
+                        ErrorController::error("Controller class '{$controllerClass}' not found");
+                        exit;
+                    }
+                    // Then check if the method exists in the controller
+                    if (!method_exists($controllerClass, $controllerMethod)) {
+                        ErrorController::error("Method '{$controllerMethod}' not found in controller '{$controllerClass}'");
+                        exit;
+                    }
+                    // If both the class and method exist, instantiate the controller and call the method
+                    $controllerInstance = new $controllerClass();
+                    $controllerInstance->$controllerMethod($params);
+                    return;
                 }
-                // If both the class and method exist, instantiate the controller and call the method
-                $controllerInstance = new $controllerClass();
-                $controllerInstance->$controllerMethod();
-                return;
             }
         }
 
