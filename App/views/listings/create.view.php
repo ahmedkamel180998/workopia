@@ -19,39 +19,54 @@
                 <h2 class="text-2xl font-bold mb-6 text-center text-gray-500">
                     Job Info
                 </h2>
+                <?php if (!empty($errors)) : ?>
+                    <div class="bg-red-100 p-3 my-3">
+                        <ul class="list-disc list-inside text-red-700">
+                            <?php foreach ($errors as $error) : ?>
+                                <li><?= htmlspecialchars($error) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="title"
                         placeholder="Job Title"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['title'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <textarea
                         name="description"
                         placeholder="Job Description"
-                        class="w-full px-4 py-2 border rounded focus:outline-none"></textarea>
+                        class="w-full px-4 py-2 border rounded focus:outline-none">
+                        <?= htmlspecialchars($listing['description'] ?? '') ?>
+                    </textarea>
                 </div>
                 <div class="mb-4">
                     <input
                         type="number"
                         name="salary"
                         placeholder="Annual Salary"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['salary'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="requirements"
                         placeholder="Requirements"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['requirements'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="benefits"
                         placeholder="Benefits"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['benefits'] ?? '') ?>" />
                 </div>
                 <h2 class="text-2xl font-bold mb-6 text-center text-gray-500">
                     Company Info & Location
@@ -61,42 +76,48 @@
                         type="text"
                         name="company"
                         placeholder="Company Name"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['company'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="address"
                         placeholder="Address"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['address'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="city"
                         placeholder="City"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['city'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="state"
                         placeholder="State"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['state'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="tel"
                         name="phone"
                         placeholder="Phone"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['phone'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="email"
                         name="email"
                         placeholder="Email Address For Applications"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($listing['email'] ?? '') ?>" />
                 </div>
                 <div class="flex items-center gap-2">
                     <button

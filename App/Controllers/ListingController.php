@@ -85,5 +85,29 @@ class ListingController
         $newListingData['user_id'] = 4;
 
         $newListingData = array_map([Validation::class, 'sanitize'], $newListingData);
+
+        $requiredFields = [
+            'title',
+            'company',
+            'city',
+            'state',
+            'phone',
+            'email',
+        ];
+
+        $errors = [];
+        foreach ($requiredFields as $field) {
+            if (empty($newListingData[$field]) || !Validation::string($newListingData[$field], 1)) {
+                $errors[] = ucfirst($field) . ' is required.';
+            }
+        }
+
+        if (!empty($errors)) {
+            view('listings/create', [
+                'errors' => $errors,
+                'listing' => $newListingData,
+            ]);
+            return;
+        }
     }
 }
