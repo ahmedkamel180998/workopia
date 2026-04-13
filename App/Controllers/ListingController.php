@@ -128,4 +128,33 @@ class ListingController
             redirect('/listings');
         }
     }
+
+    /**
+     * Delete a listing
+     *
+     * @param array $params
+     * @return void
+     */
+    public function destroy($params)
+    {
+        $id = $params['id'] ?? null;
+
+        if (!$id) {
+            redirect('/listings');
+        }
+
+        $queryParams = ['id' => $id];
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
+
+        if (!$listing) {
+            ErrorController::notFound();
+            exit;
+        }
+
+        $this->db->query('DELETE FROM listings WHERE id = :id', $queryParams);
+
+        // Set a success message in the session
+        $_SESSION['success_message'] = 'Listing deleted successfully.';
+        redirect('/listings');
+    }
 }
