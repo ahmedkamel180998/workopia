@@ -8,6 +8,12 @@
 
     <section class="container mx-auto p-4 mt-4">
         <div class="rounded-lg shadow-md bg-white p-3">
+            <?php if (isset($_SESSION['success_message'])) : ?>
+                <div class="bg-green-100 p-3 mb-4 text-green-700 rounded">
+                    <?= htmlspecialchars($_SESSION['success_message']) ?>
+                </div>
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
             <div class="flex justify-between items-center">
                 <a class="block p-4 text-blue-700" href="/listings">
                     <i class="fa fa-arrow-alt-circle-left"></i>

@@ -42,8 +42,7 @@ class ListingController
             exit;
         }
 
-        $queryParams = ['id' => $id];
-        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
+        $listing = $this->getListingById($id);
 
         view('listings/show', [
             'listing' => $listing,
@@ -142,12 +141,90 @@ class ListingController
             exit;
         }
 
-        $queryParams = ['id' => $id];
-        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
+        $listing = $this->getListingById($id);
 
         view('listings/edit', [
             'listing' => $listing,
         ]);
+    }
+
+    /**
+     * Update a listing
+     *
+     * @param array $params
+     * @return void
+     */
+    public function update($params)
+    {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            header('Location: /listings');
+            exit;
+        }
+        $listing = $this->getListingById($id);
+        $allowedFields = [
+            'title',
+            'description',
+            'salary',
+            'tags',
+            'address',
+            'city',
+            'state',
+            'phone',
+            'email',
+        ];
+
+        $updatedData = array_intersect_key($_POST, array_flip($allowedFields));
+        $updatedData = array_map([Validation::class, 'sanitize'], $updatedData);
+
+        $requiredFields = [
+            'title',
+            'salary',
+            'city',
+            'state',
+            'phone',
+            'email',
+        ];
+
+        $errors = [];
+        foreach ($requiredFields as $field) {
+            if (empty($updatedData[$field]) || !Validation::string($updatedData[$field], 1)) {
+                $errors[] = ucfirst($field) . ' is required.';
+            }
+        }
+
+        if (!empty($errors)) {
+            view('listings/edit', [
+                'errors' => $errors,
+                'listing' => $listing
+            ]);
+            exit;
+        } else {
+            // Convert empty strings to null for optional fields then add the ID to the data array
+            foreach ($updatedData as $field => $value) {
+                if ($value === '') {
+                    $updatedData[$field] = null;
+                }
+            }
+            $updatedData['id'] = $id;
+
+            // Build the SET part of the SQL query
+            $fieldsToUpdate = [];
+            foreach ($updatedData as $field => $value) {
+                $fieldsToUpdate[] = "$field = :$field";
+            }
+            $fieldsToUpdate = implode(', ', $fieldsToUpdate);
+
+            // Prepare the update query
+            $updateQuery = "UPDATE listings SET $fieldsToUpdate WHERE id = :id";
+
+            // Execute the update query
+            $this->db->query($updateQuery, $updatedData);
+
+            // Set a success message in the session then redirect to the listing page
+            $_SESSION['success_message'] = 'Listing updated successfully.';
+            redirect('/listings/' . $id);
+        }
     }
 
     /**
@@ -164,18 +241,30 @@ class ListingController
             redirect('/listings');
         }
 
-        $queryParams = ['id' => $id];
-        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
+        $listing = $this->getListingById($id);
 
-        if (!$listing) {
-            ErrorController::notFound();
-            exit;
-        }
-
-        $this->db->query('DELETE FROM listings WHERE id = :id', $queryParams);
+        $this->db->query('DELETE FROM listings WHERE id = :id', ['id' => $id]);
 
         // Set a success message in the session
         $_SESSION['success_message'] = 'Listing deleted successfully.';
         redirect('/listings');
+    }
+
+    // ====================================== PRIVATE METHODS ======================================
+    /**
+     * Fetch a listing by ID
+     * 
+     * @param int $id
+     * @return object|null
+     */
+    private function getListingById($id)
+    {
+        $queryParams = ['id' => $id];
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
+        if (!$listing) {
+            ErrorController::notFound();
+            exit;
+        }
+        return $listing;
     }
 }
