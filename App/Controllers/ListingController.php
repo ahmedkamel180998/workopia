@@ -73,6 +73,7 @@ class ListingController
             'salary',
             'requirements',
             'benefits',
+            'tags',
             'company',
             'address',
             'city',
@@ -88,6 +89,7 @@ class ListingController
 
         $requiredFields = [
             'title',
+            'salary',
             'company',
             'city',
             'state',
@@ -108,6 +110,22 @@ class ListingController
                 'listing' => $newListingData,
             ]);
             return;
+        } else {
+            $fields = [];
+            $values = [];
+            foreach ($newListingData as $field => $value) {
+                $fields[] = $field;
+                if ($value === '') {
+                    $newListingData[$field] = null;
+                }
+                $values[] = ':' . $field;
+            }
+            $fields = implode(', ', $fields);
+            $values = implode(', ', $values);
+            $sql = "INSERT INTO listings ($fields) VALUES ($values)";
+            $this->db->query($sql, $newListingData);
+
+            redirect('/listings');
         }
     }
 }

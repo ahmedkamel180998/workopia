@@ -230,3 +230,15 @@ function formatCurrency($number, $decimals = 2): string
 {
     return '$' . number_format(floatval($number), $decimals);
 }
+
+/**
+ * Redirect to specific location
+ * 
+ * @param string url
+ * @return void
+ */
+function redirect($url)
+{
+    header('Location: ' . $url);
+    exit;
+}
