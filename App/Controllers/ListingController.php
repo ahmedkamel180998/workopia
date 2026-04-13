@@ -130,6 +130,27 @@ class ListingController
     }
 
     /**
+     * Edit a single listing
+     *
+     * @return void
+     */
+    public function edit($params)
+    {
+        $id = $params['id'] ?? null;
+        if (!$id) {
+            header('Location: /listings');
+            exit;
+        }
+
+        $queryParams = ['id' => $id];
+        $listing = $this->db->query('SELECT * FROM listings WHERE id = :id', $queryParams)->fetch();
+
+        view('listings/edit', [
+            'listing' => $listing,
+        ]);
+    }
+
+    /**
      * Delete a listing
      *
      * @param array $params
