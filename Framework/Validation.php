@@ -47,4 +47,17 @@ class Validation
         $matchValue = trim($matchValue);
         return $value === $matchValue;
     }
+
+    /**
+     * Sanitize a dirty value
+     *
+     * @param string $value
+     * @return string
+     */
+    public static function sanitize($value): string
+    {
+        $value = trim($value);
+        $value = filter_var($value, FILTER_SANITIZE_SPECIAL_CHARS);
+        return $value;
+    }
 }

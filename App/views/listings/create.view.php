@@ -15,7 +15,7 @@
             <div class="message bg-green-100 p-3 my-3">
                 This is a success message.
             </div> -->
-            <form method="POST">
+            <form method="POST" action="/listings">
                 <h2 class="text-2xl font-bold mb-6 text-center text-gray-500">
                     Job Info
                 </h2>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="mb-4">
                     <input
-                        type="text"
+                        type="number"
                         name="salary"
                         placeholder="Annual Salary"
                         class="w-full px-4 py-2 border rounded focus:outline-none" />
@@ -86,7 +86,7 @@
                 </div>
                 <div class="mb-4">
                     <input
-                        type="text"
+                        type="tel"
                         name="phone"
                         placeholder="Phone"
                         class="w-full px-4 py-2 border rounded focus:outline-none" />
@@ -100,6 +100,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <button
+                        type="submit"
                         class="w-1/2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 my-3 rounded focus:outline-none">
                         Save
                     </button>

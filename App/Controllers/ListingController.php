@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Framework\Database;
+use Framework\Validation;
 
 class ListingController
 {
@@ -57,5 +58,32 @@ class ListingController
     public function create()
     {
         view('listings/create');
+    }
+
+    /**
+     * Store a new listing
+     *
+     * @return void
+     */
+    public function store()
+    {
+        $allowedFields = [
+            'title',
+            'description',
+            'salary',
+            'requirements',
+            'benefits',
+            'company',
+            'address',
+            'city',
+            'state',
+            'phone',
+            'email',
+        ];
+
+        $newListingData = array_intersect_key($_POST, array_flip($allowedFields));
+        $newListingData['user_id'] = 4;
+
+        $newListingData = array_map([Validation::class, 'sanitize'], $newListingData);
     }
 }
