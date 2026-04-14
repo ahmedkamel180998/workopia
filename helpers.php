@@ -34,12 +34,14 @@ function view($view, $data = [])
  * Load a partial view file
  * 
  * @param string $partial
+ * @param array $data
  * @return void
  */
-function partial($partial)
+function partial($partial, $data = [])
 {
     $partialPath = basePath('App/views/partials/' . $partial . '.php');
     if (file_exists($partialPath)) {
+        extract($data);
         require $partialPath;
     } else {
         echo "Partial not found: " . $partialPath;
