@@ -124,4 +124,21 @@ class UserController
 
         redirect('/');
     }
+
+    /**
+     * Logout user and destroy session
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        Session::destroy();
+
+        // Get session cookie params then expire cookie
+        $params = session_get_cookie_params();
+        setcookie('PHPSESSID', '', time() - 3600, $params['path'], $params['domain']);
+
+        // Redirect to home page
+        redirect('/');
+    }
 }
