@@ -17,28 +17,32 @@
                         type="text"
                         name="name"
                         placeholder="Full Name"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($user['name'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="email"
                         name="email"
                         placeholder="Email Address"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($user['email'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="city"
                         placeholder="City"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($user['city'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
                         type="text"
                         name="state"
                         placeholder="State"
-                        class="w-full px-4 py-2 border rounded focus:outline-none" />
+                        class="w-full px-4 py-2 border rounded focus:outline-none"
+                        value="<?= htmlspecialchars($user['state'] ?? '') ?>" />
                 </div>
                 <div class="mb-4">
                     <input
