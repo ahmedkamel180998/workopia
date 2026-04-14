@@ -56,4 +56,14 @@ class Database
             throw new Exception("Database query failed to execute: {$e->getMessage()}");
         }
     }
+
+    /**
+     * Get the last inserted ID
+     * 
+     * @return string
+     */
+    public function lastInsertId()
+    {
+        return $this->connection->lastInsertId();
+    }
 }
