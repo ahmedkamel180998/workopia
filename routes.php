@@ -2,11 +2,13 @@
 $router->get('/', 'HomeController@index');
 $router->get('/listings', 'ListingController@index');
 $router->get('/listings/create', 'ListingController@create', ['auth']);
+$router->get('/listings/search', 'ListingController@search');
 $router->get('/listings/{id}', 'ListingController@show');
 $router->get('/listings/edit/{id}', 'ListingController@edit', ['auth']);
 $router->post('/listings', 'ListingController@store', ['auth']);
 $router->put('/listings/{id}', 'ListingController@update', ['auth']);
 $router->delete('/listings/{id}', 'ListingController@destroy', ['auth']);
+
 
 // Auth routes
 $router->get('/auth/register', 'UserController@create', ['guest']);

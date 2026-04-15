@@ -275,6 +275,31 @@ class ListingController
         redirect('/listings');
     }
 
+    /**
+     * Search listings by keywords and location
+     *
+     * @return void
+     */
+    public function search()
+    {
+        $keywords = $_GET['keywords'] ? trim($_GET['keywords']) : '';
+        $location = $_GET['location'] ? trim($_GET['location']) : '';
+
+        $query = "SELECT * FROM listings WHERE (title LIKE :keywords OR description LIKE :keywords OR tags LIKE :keywords OR company LIKE :keywords) AND (city LIKE :location OR state LIKE :location)";
+
+        $params = [
+            'keywords' => '%' . $keywords . '%',
+            'location' => '%' . $location . '%',
+        ];
+        $listings = $this->db->query($query, $params)->fetchAll();
+
+        view('listings/index', [
+            'listings' => $listings,
+            'keywords' => $keywords,
+            'location' => $location,
+        ]);
+    }
+
     // ====================================== PRIVATE METHODS ======================================
     /**
      * Fetch a listing by ID
