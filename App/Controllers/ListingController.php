@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use Framework\Database;
 use Framework\Validation;
+use Framework\Session;
+use Framework\Authorization;
 
 class ListingController
 {
@@ -82,7 +84,7 @@ class ListingController
         ];
 
         $newListingData = array_intersect_key($_POST, array_flip($allowedFields));
-        $newListingData['user_id'] = 4;
+        $newListingData['user_id'] = Session::get('user')['user_id'];
 
         $newListingData = array_map([Validation::class, 'sanitize'], $newListingData);
 
@@ -239,9 +241,17 @@ class ListingController
 
         if (!$id) {
             redirect('/listings');
+            exit;
         }
 
         $listing = $this->getListingById($id);
+
+        // Check if the logged-in user owns the listing before allowing deletion
+        if (!Authorization::owns($listing->user_id)) {
+            $_SESSION['error_message'] = 'You are not authorized to delete this listing.';
+            redirect('/listings/' . $listing->id);
+            exit;
+        }
 
         $this->db->query('DELETE FROM listings WHERE id = :id', ['id' => $id]);
 
