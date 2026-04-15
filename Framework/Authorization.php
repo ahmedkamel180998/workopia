@@ -17,8 +17,7 @@ class Authorization
         $sessionUser = Session::get('user');
 
         if (!$sessionUser) {
-            redirect('/auth/login');
-            exit;
+            return false;
         }
 
         if (isset($sessionUser['user_id']) && $sessionUser['user_id'] == $resourceUserId) {
