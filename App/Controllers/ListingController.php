@@ -147,6 +147,12 @@ class ListingController
 
         $listing = $this->getListingById($id);
 
+        if (!Authorization::owns($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to edit this listing.');
+            redirect('/listings/' . $listing->id);
+            exit;
+        }
+
         view('listings/edit', [
             'listing' => $listing,
         ]);
@@ -166,6 +172,13 @@ class ListingController
             exit;
         }
         $listing = $this->getListingById($id);
+
+        if (!Authorization::owns($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to edit this listing.');
+            redirect('/listings/' . $listing->id);
+            exit;
+        }
+
         $allowedFields = [
             'title',
             'description',
