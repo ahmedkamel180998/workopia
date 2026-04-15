@@ -141,4 +141,67 @@ class UserController
         // Redirect to home page
         redirect('/');
     }
+
+    /**
+     * Authenticate a user with email and password
+     * 
+     * @return void
+     */
+    public function authenticate()
+    {
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        $errors = [];
+
+        if (!Validation::email($email)) {
+            $errors['email'] = 'Please enter a valid email address';
+        }
+
+        if (!Validation::string($password, 6)) {
+            $errors['password'] = 'Password must be at least 6 characters';
+        }
+
+        if (!empty($errors)) {
+            view('users/login', [
+                'errors' => $errors,
+                'email' => $email
+            ]);
+            exit;
+        }
+
+        // Check if user exists
+        $params = ['email' => $email];
+        $user = $this->db->query('SELECT * FROM users WHERE email = :email', $params)->fetch();
+
+        if (!$user) {
+            $errors['email'] = 'Incorrect credentials';
+            view('users/login', [
+                'errors' => $errors,
+                'email' => $email
+            ]);
+            exit;
+        }
+
+        // Verify password
+        if (!password_verify($password, $user->password)) {
+            $errors['email'] = 'Incorrect credentials';
+            view('users/login', [
+                'errors' => $errors,
+                'email' => $email
+            ]);
+            exit;
+        }
+
+        // Set user session After successful login
+        Session::set('user', [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'city' => $user->city,
+            'state' => $user->state
+        ]);
+
+        redirect('/');
+    }
 }

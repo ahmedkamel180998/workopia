@@ -17,6 +17,7 @@
                         type="email"
                         name="email"
                         placeholder="Email Address"
+                        value="<?= htmlspecialchars($email ?? '') ?>"
                         class="w-full px-4 py-2 border rounded focus:outline-none" />
                 </div>
                 <div class="mb-4">
