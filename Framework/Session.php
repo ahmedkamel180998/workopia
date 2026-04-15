@@ -74,4 +74,29 @@ class Session
         session_unset();
         session_destroy();
     }
+
+    /**
+     * Set flash message to be displayed on the next request.
+     * 
+     * @param string $key
+     * @param string $message
+     * @return void
+     */
+    public static function setFlashMessage($key, $message)
+    {
+        self::set('flash_' . $key, $message);
+    }
+
+    /**
+     * Get and clear flash message by key.
+     * 
+     * @param string $key
+     * @return string|null
+     */
+    public static function getFlashMessage($key)
+    {
+        $flashMessage = self::get('flash_' . $key);
+        self::clear('flash_' . $key);
+        return $flashMessage;
+    }
 }
